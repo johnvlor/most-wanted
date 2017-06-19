@@ -8,6 +8,7 @@ function app(people){
   switch(searchType){
     case 'yes':
     // TODO: search by name
+    var = searchByName();
     break;
     case 'no':
     // TODO: search by traits
