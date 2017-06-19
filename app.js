@@ -8,9 +8,12 @@ function app(people){
   switch(searchType){
     case 'yes':
     // TODO: search by name
+	var person = searchByName();
+	mainMenu(person, people);
     break;
     case 'no':
     // TODO: search by traits
+	var info = searchByTrait();
     break;
     default:
     app(people); // restart app
@@ -56,6 +59,8 @@ function searchByName(people){
 
   // TODO: find the person using the name they entered
 
+  return person;
+
 }
 
 // alerts a list of people
@@ -90,4 +95,13 @@ function yesNo(input){
 // helper function to pass in as default promptFor validation
 function chars(input){
   return true; // default validation only
+}
+
+function searchByTrait () {
+	var gender = promptFor("What is the person's gender?", chars);
+	var dob = promptFor("What is the person's date of birth?", chars);
+	var height = promptFor("What is the person's height?", chars);
+	var weight = promptFor("What is the person's weight?", chars);
+	var eyeColor = promptFor("What is the person's eye color?", chars);
+	var occupation = promptFor("What is the person's occupation?", chars);
 }
