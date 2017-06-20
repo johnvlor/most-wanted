@@ -58,10 +58,8 @@ function mainMenu(person, people){
 function searchByName(people){
   var firstName = promptFor("What is the person's first name?", chars);
   var lastName = promptFor("What is the person's last name?", chars);
-
   // TODO: find the person using the name they entered
 
-  return person;
 
 
 }
