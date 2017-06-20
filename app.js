@@ -1,3 +1,4 @@
+"use strict";
 /*
 Build all of your functions for displaying and gathering information below (GUI).
 */
@@ -65,7 +66,7 @@ function mainMenu(person, people){
   switch(displayOption){
     case "info":
     // TODO: get person's info
-		displayPerson(person);
+		displayPerson(person,people);
     break;
     case "family":
     findFamily();
@@ -73,6 +74,9 @@ function mainMenu(person, people){
     break;
     case "descendants":
     // TODO: get person's descendants
+	var descendants = [];
+		var descendantInfo = findDescendants(person,people,descendants);
+		displayDescendants(person,descendantInfo);
     break;
     case "restart":
     app(people); // restart
@@ -145,6 +149,11 @@ function findFamily(person, people) {
     
 }}
 
+function displayDescendants(person,descendants){
+  alert(person.firstName+ " " + person.lastName+"'s descendants are: \n"+descendants);
+}
+
+
 // function that prompts and validates user input
 function promptFor(question, valid){
   do{
@@ -195,7 +204,37 @@ function searchByGender (people) {
 // function searchByEyeColor() {
 // 	var eyeColor = promptFor("What is the person's eye color?", chars);
 // }
-
 // function searcyByOccupation() {
 // 	var occupation = promptFor("What is the person's occupation?", chars);
 // }
+
+function searcyByOccupation() {
+	var occupation = promptFor("What is the person's occupation?", chars);
+}
+
+function findDescendants(person, people, descendants, x=0) {
+	var newPerson;
+	var i = 0;
+	
+	if (x < people.length){
+	//for (var x = 0; x < people.length; x++) {
+		newPerson = people[x];
+		//console.log(newPerson);
+		//console.log(newPerson.parents);
+
+		while (i < newPerson.parents.length) {
+
+			if (newPerson.parents[i] == person.id) {
+				descendants.push(newPerson.firstName+" "+newPerson.lastName);
+				console.log("descendants = ",descendants);
+			}
+			i++;
+		}
+		return findDescendants(person, people, descendants, x+1);
+	}
+	else {
+		console.log("descendants = ",descendants);
+	}
+	return descendants;
+}
+
