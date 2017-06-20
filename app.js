@@ -7,7 +7,6 @@ function app(people){
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
     case 'yes':
-    // TODO: search by name
 		var person = searchByName(people);
 		console.log(person);
 		mainMenu(person, people);
@@ -23,6 +22,8 @@ function app(people){
   }
 }
 
+
+
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
 
@@ -30,6 +31,7 @@ function mainMenu(person, people){
 
   if(!person){
     alert("Could not find that individual.");
+    //////////////////////
     return app(people); // restart
   }
 
@@ -58,9 +60,7 @@ function mainMenu(person, people){
 function searchByName(people){
   var firstName = promptFor("What is the person's first name?", chars);
   var lastName = promptFor("What is the person's last name?", chars);
-
   var person;
-
   // TODO: find the person using the name they entered
  
 	for (var x = 0; x < people.length; x++) {
