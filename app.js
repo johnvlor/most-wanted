@@ -15,6 +15,7 @@ function app(people){
     case 'no':
     // TODO: search by traits
 	var info = searchByTrait();
+
     break;
     default:
     app(people); // restart app
@@ -68,6 +69,7 @@ function searchByName(people){
         }
     }
   return;
+
 
 }
 
