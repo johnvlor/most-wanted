@@ -77,6 +77,7 @@ function mainMenu(person, people){
     break;
     case "descendants":
 	var descendants = [];
+
 		var descendantInfo = findDescendants(person,people,descendants);
 		displayDescendants(person,descendantInfo);
     break;
@@ -164,7 +165,12 @@ return (children);
 
 
 function displayDescendants(person,descendants){
-  alert(person.firstName+ " " + person.lastName+"'s descendants are: \n"+descendants);
+	if (descendants == 0) {
+		alert(person.firstName+ " " + person.lastName+" has no descendants.");
+	}
+	else {
+		alert(person.firstName+ " " + person.lastName+"'s descendants are: \n"+descendants);
+	}
 }
 
 function displayFamily(person,siblings,spouse){
@@ -194,17 +200,9 @@ function searchByTrait () {
 	
 }
 
-function searchByGender (people) {
-	var gender = promptFor("What is the person's gender?", chars);
-	var person;
-	
-	for (var x = 0; x < people.length; x++) {
-		person = people[x];
-			if ((person.gender.toLowerCase() === gender.toLowerCase()) && (person.gender.toLowerCase() === gender.toLowerCase())) {
-            return person;
-        }
-    }
-	return;
+function searchByGender(people) {
+	var gender = prompt("What is the person's gender?", chars);
+
 }
 
 // function searchByDob() {
@@ -222,29 +220,43 @@ function searchByGender (people) {
 // function searchByEyeColor() {
 // 	var eyeColor = promptFor("What is the person's eye color?", chars);
 // }
+
 // function searcyByOccupation() {
 // 	var occupation = promptFor("What is the person's occupation?", chars);
 // }
 
-function searcyByOccupation() {
-	var occupation = promptFor("What is the person's occupation?", chars);
-}
 
 function findDescendants(person, people, descendants, x=0) {
 	var newPerson;
-	var i = 0;
 	
 	if (x < people.length){
-	
+
 		newPerson = people[x];
+		//console.log(newPerson);
+		//console.log(newPerson.firstName);
 
-		while (i < newPerson.parents.length) {
+		if (newPerson.parents.length != 0) {
+			for (var i = 0; i < newPerson.parents.length; i++) {
+				
+				if (newPerson.parents[i] == person.id) {
+					descendants.push(newPerson.firstName+" "+newPerson.lastName);
+					console.log("descendants = ",descendants);
 
-			if (newPerson.parents[i] == person.id) {
-				descendants.push(newPerson.firstName+" "+newPerson.lastName);
-				console.log("descendants = ",descendants);
+					for (var y = 0; y < descendants.length; y++) {
+						for (var z = 0; z < people.length; z++) {
+							var newDescendants = people[z];
+								
+							if (newDescendants.parents[i] == newPerson.id) {
+								descendants.push(newDescendants.firstName+" "+newDescendants.lastName);
+								newPerson = people[z];
+							}
+						}
+					}
+					
+				}	
+
 			}
-			i++;
+	
 		}
 		return findDescendants(person, people, descendants, x+1);
 	}
