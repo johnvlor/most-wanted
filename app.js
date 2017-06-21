@@ -8,7 +8,6 @@ function app(people){
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
     case 'yes':
-    // TODO: search by name
 		var person = searchByName(people);
 		console.log(person);
 		mainMenu(person, people);
@@ -50,6 +49,8 @@ function app(people){
   }
 }
 
+
+
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
 
@@ -68,6 +69,7 @@ function mainMenu(person, people){
 		displayPerson(person,people);
     break;
     case "family":
+    findFamily();
     // TODO: get person's family
     break;
     case "descendants":
@@ -89,12 +91,14 @@ function mainMenu(person, people){
 function searchByName(people){
   var firstName = promptFor("What is the person's first name?", chars);
   var lastName = promptFor("What is the person's last name?", chars);
-
+ 	if(/[0-9]/.test(firstName)){
+     	alert("The first name must be alphanumerical");
+}	else if(/[0-9]/.test(lastName)){
+    	alert("The last name must be alphanumerical");
+}
   var person;
-
   // TODO: find the person using the name they entered
- 
-	for (var x = 0; x < people.length; x++) {
+ 	for (var x = 0; x < people.length; x++) {
 		person = people[x];
 			if ((person.firstName.toLowerCase() === firstName.toLowerCase()) && (person.lastName.toLowerCase() === lastName.toLowerCase())) {
             return person;
@@ -125,6 +129,26 @@ function displayPerson(person){
   alert(personInfo);
 }
 
+function findFamily(person, people) {
+    var family = [];
+    var newPerson;
+    
+    for (var x = 0; x < people.length; x++) {
+        newPerson = people[x];
+        console.log(newPerson.parents);
+        console.log("length = ", newPerson.parents.length);
+        
+    while (i < newPerson.parents.length) {
+        console.log(i,"new person parents ",newPerson.parents[i], person.id);
+    if (newPerson.parents[i] == person.id) {
+                descendants.push(newPerson.firstName+" "+newPerson.lastName);
+        }
+            i++;
+        }
+        	i = 0;
+    
+}}
+
 function displayDescendants(person,descendants){
 	if (descendants == 0) {
 		alert(person.firstName+ " " + person.lastName+" has no descendants.");
@@ -133,6 +157,7 @@ function displayDescendants(person,descendants){
 		alert(person.firstName+ " " + person.lastName+"'s descendants are: \n"+descendants);
 	}
 }
+
 
 // function that prompts and validates user input
 function promptFor(question, valid){
@@ -169,21 +194,24 @@ function searchByGender (people) {
 	return;
 }
 
-function searchByDob() {
-	var dob = promptFor("What is the person's date of birth?", chars);
-}
+// function searchByDob() {
+// 	var dob = promptFor("What is the person's date of birth?", chars);
+// }
 
-function searchByHeight() {
-	var height = promptFor("What is the person's height?", chars);
-}
+// function searchByHeight() {
+// 	var height = promptFor("What is the person's height?", chars);
+// }
 
-function searchByWeight() {
-	var weight = promptFor("What is the person's weight?", chars);
-}
+// function searchByWeight() {
+// 	var weight = promptFor("What is the person's weight?", chars);
+// }
 
-function searchByEyeColor() {
-	var eyeColor = promptFor("What is the person's eye color?", chars);
-}
+// function searchByEyeColor() {
+// 	var eyeColor = promptFor("What is the person's eye color?", chars);
+// }
+// function searcyByOccupation() {
+// 	var occupation = promptFor("What is the person's occupation?", chars);
+// }
 
 function searcyByOccupation() {
 	var occupation = promptFor("What is the person's occupation?", chars);
@@ -228,3 +256,4 @@ function findDescendants(person, people, descendants, x=0) {
 	}
 	return descendants;
 }
+
