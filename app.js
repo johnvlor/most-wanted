@@ -181,17 +181,9 @@ function searchByTrait () {
 	
 }
 
-function searchByGender (people) {
-	var gender = promptFor("What is the person's gender?", chars);
-	var person;
-	
-	for (var x = 0; x < people.length; x++) {
-		person = people[x];
-			if ((person.gender.toLowerCase() === gender.toLowerCase()) && (person.gender.toLowerCase() === gender.toLowerCase())) {
-            return person;
-        }
-    }
-	return;
+function searchByGender(people) {
+	var gender = prompt("What is the person's gender?", chars);
+
 }
 
 // function searchByDob() {
@@ -209,17 +201,14 @@ function searchByGender (people) {
 // function searchByEyeColor() {
 // 	var eyeColor = promptFor("What is the person's eye color?", chars);
 // }
+
 // function searcyByOccupation() {
 // 	var occupation = promptFor("What is the person's occupation?", chars);
 // }
 
-function searcyByOccupation() {
-	var occupation = promptFor("What is the person's occupation?", chars);
-}
 
 function findDescendants(person, people, descendants, x=0) {
 	var newPerson;
-	var i = 0;
 	
 	if (x < people.length){
 		newPerson = people[x];
@@ -227,20 +216,19 @@ function findDescendants(person, people, descendants, x=0) {
 		//console.log(newPerson.firstName);
 
 		if (newPerson.parents.length != 0) {
-			for (var y = 0; y < newPerson.parents.length; y++) {
+			for (var i = 0; i < newPerson.parents.length; i++) {
 				
-				if (newPerson.parents[y] == person.id) {
+				if (newPerson.parents[i] == person.id) {
 					descendants.push(newPerson.firstName+" "+newPerson.lastName);
 					console.log("descendants = ",descendants);
 
-					for (var z = 0; z < descendants.length; z++) {
-						for (var a = 0; a < people.length; a++) {
-							var newDescendants = people[a];
+					for (var y = 0; y < descendants.length; y++) {
+						for (var z = 0; z < people.length; z++) {
+							var newDescendants = people[z];
 								
-							if (newDescendants.parents[y] == newPerson.id) {
+							if (newDescendants.parents[i] == newPerson.id) {
 								descendants.push(newDescendants.firstName+" "+newDescendants.lastName);
-								console.log("new descendants = ", descendants);
-								newPerson = people[a];
+								newPerson = people[z];
 							}
 						}
 					}
