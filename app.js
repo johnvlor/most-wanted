@@ -72,7 +72,7 @@ function mainMenu(person, people){
     break;
     case "descendants":
     // TODO: get person's descendants
-	var descendants = [];
+		var descendants = [];
 		var descendantInfo = findDescendants(person,people,descendants);
 		displayDescendants(person,descendantInfo);
     break;
@@ -126,7 +126,12 @@ function displayPerson(person){
 }
 
 function displayDescendants(person,descendants){
-  alert(person.firstName+ " " + person.lastName+"'s descendants are: \n"+descendants);
+	if (descendants == 0) {
+		alert(person.firstName+ " " + person.lastName+" has no descendants.");
+	}
+	else {
+		alert(person.firstName+ " " + person.lastName+"'s descendants are: \n"+descendants);
+	}
 }
 
 // function that prompts and validates user input
@@ -189,18 +194,32 @@ function findDescendants(person, people, descendants, x=0) {
 	var i = 0;
 	
 	if (x < people.length){
-	//for (var x = 0; x < people.length; x++) {
 		newPerson = people[x];
 		//console.log(newPerson);
-		//console.log(newPerson.parents);
+		//console.log(newPerson.firstName);
 
-		while (i < newPerson.parents.length) {
+		if (newPerson.parents.length != 0) {
+			for (var y = 0; y < newPerson.parents.length; y++) {
+				
+				if (newPerson.parents[y] == person.id) {
+					descendants.push(newPerson.firstName+" "+newPerson.lastName);
+					console.log("descendants = ",descendants);
 
-			if (newPerson.parents[i] == person.id) {
-				descendants.push(newPerson.firstName+" "+newPerson.lastName);
-				console.log("descendants = ",descendants);
+					for (var z = 0; z < descendants.length; z++) {
+						for (var a = 0; a < people.length; a++) {
+							var newDescendants = people[a];
+								
+							if (newDescendants.parents[y] == newPerson.id) {
+								descendants.push(newDescendants.firstName+" "+newDescendants.lastName);
+								console.log("new descendants = ", descendants);
+								newPerson = people[a];
+							}
+						}
+					}
+					
+				}	
 			}
-			i++;
+	
 		}
 		return findDescendants(person, people, descendants, x+1);
 	}
