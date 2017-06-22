@@ -83,12 +83,15 @@ function mainMenu(person, people){
 		displayPerson(person,people);
     break;
     case "family":
-    findFamily();
+    var siblings = [];
+    	var familyInfo = findChildren(people,person);
+    	displayFamily(person,familyInfo);
+
     // TODO: get person's family
     break;
     case "descendants":
-    // TODO: get person's descendants
-		var descendants = [];
+	var descendants = [];
+
 		var descendantInfo = findDescendants(person,people,descendants);
 		displayDescendants(person,descendantInfo);
     break;
@@ -144,25 +147,37 @@ function displayPerson(person){
   alert(personInfo);
 }
 
-function findFamily(person, people) {
-    var family = [];
-    var newPerson;
-    
-    for (var x = 0; x < people.length; x++) {
-        newPerson = people[x];
-        console.log(newPerson.parents);
-        console.log("length = ", newPerson.parents.length);
-        
-    while (i < newPerson.parents.length) {
-        console.log(i,"new person parents ",newPerson.parents[i], person.id);
-    if (newPerson.parents[i] == person.id) {
-                descendants.push(newPerson.firstName+" "+newPerson.lastName);
-        }
-            i++;
-        }
-        	i = 0;
-    
-}}
+
+function findSpouse(people, person){
+	var spouse = people.filter(function (el){
+		return (el.currentSpouse === person.id);
+	});
+return (spouse);
+}
+
+
+function findChildren(people, person){
+	var siblings = people.filter(function (el){
+		return (el.parents.includes (person.id));
+	});
+return (children);
+}
+
+
+// function findSiblings(people, person){
+
+
+
+// function findParents(people, person){
+
+
+
+
+
+
+
+
+
 
 function displayDescendants(person,descendants){
 	if (descendants == 0) {
@@ -171,6 +186,10 @@ function displayDescendants(person,descendants){
 	else {
 		alert(person.firstName+ " " + person.lastName+"'s descendants are: \n\n"+descendants.join("\n"));
 	}
+}
+
+function displayFamily(person,siblings,spouse){
+  alert(person.firstName+ " " + person.lastName+"'s immediate family is: \n"+siblings.map(function(person) {return person.firstName+ " " + person.lastName}));
 }
 
 
@@ -279,6 +298,7 @@ function findDescendants(person, people, descendants, x=0) {
 	var newPerson;
 	
 	if (x < people.length){
+
 		newPerson = people[x];
 		//console.log(newPerson);
 		//console.log(newPerson.firstName);
@@ -302,6 +322,7 @@ function findDescendants(person, people, descendants, x=0) {
 					}
 					
 				}	
+
 			}
 	
 		}
