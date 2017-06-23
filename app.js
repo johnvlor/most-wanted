@@ -43,9 +43,9 @@ function mainMenu(person, people){
     // TODO: get person's info
 		displayPerson(person,people);
     break;
+    
     case "family":
-    //var siblings = [];
-    	var familyInfo = findSpouse(people,person);
+    	var familyInfo = findFamily(people,person);
     	displayFamily(person,familyInfo);
 
     // TODO: get person's family
@@ -68,14 +68,12 @@ function mainMenu(person, people){
 function searchByName(people){
   var firstName = promptFor("What is the person's first name?", chars);
   var lastName = promptFor("What is the person's last name?", chars);
- 	// if(/[0-9]/.test(firstName)){
-     	// alert("The first name must be alphanumerical");
-// }	else if(/[0-9]/.test(lastName)){
-    	// alert("The last name must be alphanumerical");
-// }
-
-  // TODO: find the person using the name they entered
- 	var person = [];
+ 	if(/[0-9]/.test(firstName)){
+     	alert("The first name must be alphanumerical");
+}	else if(/[0-9]/.test(lastName)){
+    	alert("The last name must be alphanumerical");
+}
+	var person = [];
 	for (var x = 0; x < people.length; x++) {
 		person = people[x];
 			if ((person.firstName.toLowerCase() === firstName.toLowerCase()) && (person.lastName.toLowerCase() === lastName.toLowerCase())) {
@@ -93,8 +91,6 @@ function displayPeople(people){
 }
 
 function displayPerson(person){
-  // print all of the information about a person:
-  // height, weight, age, name, occupation, eye color.
   var personInfo = "First Name: " + person.firstName + "\n";
   personInfo += "Last Name: " + person.lastName + "\n";
   personInfo += "Gender: " + person.gender + "\n";
@@ -103,8 +99,22 @@ function displayPerson(person){
   personInfo += "Weight: " + person.weight + "\n";
   personInfo += "Eye Color: " + person.eyeColor + "\n";
   personInfo += "Occupation: " + person.occupation + "\n";
-  // TODO: finish getting the rest of the information to display
   alert(personInfo);
+}
+
+function findFamily(people, person){
+		var wholeFamily = [];
+		var spouse = findSpouse(people, person);
+		var children = findChildren(people, person);
+		var siblings = findSiblings(people, person);
+		var parents = findParents(people,person);
+		var newArray = spouse.concat(children);
+		var newArray1 = siblings.concat(parents);
+		var entireFamily = newArray.concat(newArray1);
+////fix .concat to one concat function and fix names/////
+		console.log(entireFamily);
+	return entireFamily;
+
 }
 
 
@@ -117,7 +127,6 @@ return (spouse);
 
 
 function findChildren(people, person){
-	console.log(person.parents);
 	var children = people.filter(function (el){
 		return (el.parents.includes (person.id));
 	});
@@ -125,19 +134,25 @@ return (children);
 }
 
 
-// function findSiblings(people, person){
+function findSiblings(people, person){
+	var siblings = people.filter(function (el){
+		// for(i=0; i < people.length; i++)
+			// fix original person.id coming back with siblings
+			// if (people === person.id)
+		return (el.parents.includes (person.parents[0]));
+	});
+return (siblings);
+}
 
 
 
-// function findParents(people, person){
-
-
-
-
-
-
-
-
+function findParents(people, person){
+	var parents = people.filter(function (el)
+	{
+		 return (el.id === (person.parents[0]))+(el.id === (person.parents[1]));
+	});
+return (parents);
+}
 
 
 function displayDescendants(person,descendants){
@@ -149,11 +164,10 @@ function displayDescendants(person,descendants){
 	}
 }
 
-function displayFamily(person,siblings,spouse){
-  alert(person.firstName+ " " + person.lastName+"'s immediate family is: \n"+siblings.map(function(person) {return person.firstName+ " " + person.lastName}));
+function displayFamily(person,familyInfo){
+  alert(person.firstName+ " " + person.lastName+"'s immediate family is:\n\n"+familyInfo.map(function(el) {return el.firstName+ " " + el.lastName}).join("\n"));
 }
 
-// function that prompts and validates user input
 function promptFor(question, valid){
   do{
     var response = prompt(question).trim();
@@ -161,14 +175,12 @@ function promptFor(question, valid){
   return response;
 }
 
-// helper function to pass into promptFor to validate yes/no answers
 function yesNo(input){
   return input.toLowerCase() == "yes" || input.toLowerCase() == "no";
 }
 
-// helper function to pass in as default promptFor validation
 function chars(input){
-  return true; // default validation only
+  return true;
 }
 
 function searchByTrait (person, people) {
@@ -185,7 +197,6 @@ function searchByTrait (person, people) {
 	}
 	return findEyeColor[0];
 }
-
 
 function searchByAge(person, people) {
 	var findAge = [];
@@ -298,6 +309,7 @@ function findDescendants(person, people, descendants, x=0) {
 		newPerson = people[x];
 
 		if (newPerson.parents.length != 0) {
+			
 			for (var i = 0; i < newPerson.parents.length; i++) {
 				
 				if (newPerson.parents[i] == person.id) {
@@ -305,6 +317,7 @@ function findDescendants(person, people, descendants, x=0) {
 					console.log("descendants = ",descendants);
 
 					for (var y = 0; y < descendants.length; y++) {
+						
 						for (var z = 0; z < people.length; z++) {
 							var newDescendants = people[z];
 								
@@ -314,11 +327,8 @@ function findDescendants(person, people, descendants, x=0) {
 							}
 						}
 					}
-					
 				}	
-
 			}
-	
 		}
 		return findDescendants(person, people, descendants, x+1);
 	}
