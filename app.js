@@ -1,87 +1,77 @@
 "use strict";
-/*
-Build all of your functions for displaying and gathering information below (GUI).
-*/
 
-// app is the function called to start the entire application
 function app(people){
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
     case 'yes':
 		var person = searchByName(people);
-//		console.log(person);
 		mainMenu(person, people);
     break;
     case 'no':
-    // TODO: search by traits
-		//var person = [];
 		var person = searchByTrait(person, people);
 		mainMenu(person, people);
     break;
     default:
-    app(people); // restart app
+    app(people); 
     break;
   }
 }
 
-// Menu function to call once you find who you are looking for
 function mainMenu(person, people){
-
-  /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
 
   if(!person){
     alert("Could not find that individual.");
-    return app(people); // restart
+    return app(people); 
   }
 
   var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
 
   switch(displayOption){
     case "info":
-    // TODO: get person's info
-		displayPerson(person,people);
     break;
     
     case "family":
     	var familyInfo = findFamily(people,person);
     	displayFamily(person,familyInfo);
-
-    // TODO: get person's family
-    break;
+	break;
+    
     case "descendants":
 		var descendants = [];
 		var descendantInfo = findDescendants(person,people,descendants);
 		displayDescendants(person,descendantInfo);
     break;
+    
     case "restart":
-    app(people); // restart
+    app(people); 
     break;
+    
     case "quit":
-    return; // stop execution
+    return; 
     default:
-    return mainMenu(person, people); // ask again
+    return mainMenu(person, people);
   }
 }
 
 function searchByName(people){
   var firstName = promptFor("What is the person's first name?", chars);
   var lastName = promptFor("What is the person's last name?", chars);
- 	// if(/[0-9]/.test(firstName)){
-     	// alert("The first name must be alphanumerical");
-// }	else if(/[0-9]/.test(lastName)){
-    	// alert("The last name must be alphanumerical");
-// }
-	var person = [];
-	for (var x = 0; x < people.length; x++) {
-		person = people[x];
-			if ((person.firstName.toLowerCase() === firstName.toLowerCase()) && (person.lastName.toLowerCase() === lastName.toLowerCase())) {
-            return person;
+
+ 	if(/[0-9]/.test(firstName)){
+     	alert("The first name must be alphanumerical");
+	}	else if(/[0-9]/.test(lastName)){
+    	alert("The last name must be alphanumerical");
+	}
+		var person = [];
+		for (var x = 0; x < people.length; x++) {
+			person = people[x];
+				if ((person.firstName.toLowerCase() === firstName.toLowerCase()) && (person.lastName.toLowerCase() === lastName.toLowerCase())) {
+            	
+            	return person;
         }
     }
   return;
 }
 
-// alerts a list of people
 function displayPeople(people){
   alert(people.map(function(person){
     return person.firstName + " " + person.lastName;
@@ -101,16 +91,12 @@ function displayPerson(person){
 }
 
 function findFamily(people, person){
-		var wholeFamily = [];
 		var spouse = findSpouse(people, person);
 		var children = findChildren(people, person);
 		var siblings = findSiblings(people, person);
 		var parents = findParents(people,person);
-		var newArray = spouse.concat(children);
-		var newArray1 = siblings.concat(parents);
-		var entireFamily = newArray.concat(newArray1);
-////fix .concat to one concat function and fix names/////
-		console.log(entireFamily);
+		var entireFamily = spouse.concat(children,siblings,parents);
+	
 	return entireFamily;
 
 }
@@ -131,11 +117,13 @@ function findChildren(people, person){
 
 function findSiblings(people, person){
 	var siblings = people.filter(function (el){
-		// for(i=0; i < people.length; i++)
-			// fix original person.id coming back with siblings
-			// if (people === person.id)
 		return (el.parents.includes (person.parents[0]));
 	});
+
+	var siblings = siblings.filter(function (el){
+		return (el.id !== person.id);
+	});
+
 	return (siblings);
 }
 
@@ -146,7 +134,6 @@ function findParents(people, person){
 	});
 	return (parents);
 }
-
 
 function displayDescendants(person,descendants){
 	if (descendants == 0) {
@@ -176,9 +163,8 @@ function chars(input){
   return true;
 }
 
-
 function searchByTrait (person, people) {
-	alert("Let's start to search by the below options.");
+	alert("Let's search with the following options.");
 
 	var findAge	= searchByAge(people);
 	var findHeight = searchByHeight(person, findAge);
@@ -193,10 +179,9 @@ function searchByTrait (person, people) {
 	else {
 		return findEyeColor[0];
 	}
-	
+
 	return findEyeColor;
 }
-
 
 function searchByAge(people) {
 	var findAge = [];
@@ -204,6 +189,7 @@ function searchByAge(people) {
 	
 	if (getAge === 'skip') {
 		findAge = people;
+		
 		return findAge;
 	}
 	
@@ -326,7 +312,7 @@ function searchByOccupation(person, findWeight) {
 	else {
 		findOccupation = findWeight.filter(function(person) {
 			return (person.occupation === getOccupation);});
-
+			
 		alert("Occupation: "+getOccupation+("\n")+findOccupation.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
 
 	return findOccupation;
@@ -342,12 +328,12 @@ function searchByEyeColor(person, findOccupation) {
 		return findEyeColor;
 	}
 	else {
-		findEyeColor = findOccupation.filter(function(person) {
+		findEyeColor = findOccupation.filter(function(person) {			
 			return (person.eyeColor === getEyeColor);});
-
+			
 		alert("Eye Color: "+getEyeColor+("\n")+findEyeColor.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
 
-	return findEyeColor;
+		return findEyeColor;
 	}
 }
 
@@ -380,6 +366,5 @@ function findDescendants(person, people, descendants, x=0) {
 		}
 		return findDescendants(person, people, descendants, x+1);
 	}
-
 	return descendants;
 }
