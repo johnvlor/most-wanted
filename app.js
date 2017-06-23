@@ -24,8 +24,6 @@ function app(people){
   }
 }
 
-
-
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
 
@@ -191,10 +189,15 @@ function searchByTrait (person, people) {
 	var findWeight = searchByWeight(person, findHeight);
 	var findOccupation = searchByOccupation(person, findWeight);
 	var findEyeColor = searchByEyeColor(person, findOccupation);
+	console.log(findEyeColor.length);
+	console.log(findEyeColor);
 	
-	if (findEyeColor.length > 0) {
-		var result = prompt("Here's a list of possible names.\n"+findEyeColor.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
-	}
+	// if (findEyeColor.length === 0) {
+		// return findEyeColor[0];
+	// }
+	// else if (findEyeColor > 0) {
+		// var result = prompt("Here's a list of possible names.\n"+findEyeColor.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
+	// }
 	return findEyeColor[0];
 }
 
@@ -205,6 +208,18 @@ function searchByAge(person, people) {
 	if (getAge === 'skip') {
 		findAge = people;
 		return findAge;
+	}
+	else {
+		var todayDate = new Date();
+		var todayYear = todayDate.getFullYear();
+		var todayMonth = todayDate.getMonth()
+		var todayDay = todayDate.getDate();
+		console.log(todayDate,todayYear, todayMonth, todayDay);
+		
+
+		
+		console.log(findAge);
+	return findAge;
 	}
 
 }
