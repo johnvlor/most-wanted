@@ -28,6 +28,7 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
+		displayPerson(person);
     break;
     
     case "family":
@@ -91,14 +92,13 @@ function displayPerson(person){
 }
 
 function findFamily(people, person){
-		var spouse = findSpouse(people, person);
-		var children = findChildren(people, person);
-		var siblings = findSiblings(people, person);
-		var parents = findParents(people,person);
-		var entireFamily = spouse.concat(children,siblings,parents);
-	
-	return entireFamily;
+	var spouse = findSpouse(people, person);
+	var children = findChildren(people, person);
+	var siblings = findSiblings(people, person);
+	var parents = findParents(people,person);
+	var entireFamily = spouse.concat(children,siblings,parents);
 
+	return entireFamily;
 }
 
 function findSpouse(people, person){
@@ -123,7 +123,6 @@ function findSiblings(people, person){
 	var siblings = siblings.filter(function (el){
 		return (el.id !== person.id);
 	});
-
 	return (siblings);
 }
 
@@ -179,8 +178,6 @@ function searchByTrait (person, people) {
 	else {
 		return findEyeColor[0];
 	}
-
-	return findEyeColor;
 }
 
 function searchByAge(people) {
@@ -193,8 +190,7 @@ function searchByAge(people) {
 		return findAge;
 	}
 	
-	getAge = parseInt(getAge);
-	
+	getAge = parseInt(getAge);	
 	if (getAge <= 0 || getAge >= 200) {
 		alert("Not found in the system.  Please try again.");
 		return searchByAge(people);
@@ -206,6 +202,7 @@ function searchByAge(people) {
 	else {
 		findAge = calculateAge(people, getAge);
 	}
+	
 	return findAge;
 }
 
@@ -235,7 +232,7 @@ function calculateAge(people, getAge) {
 				age = age -1;
 			}
 		}
-
+		
 		if (age === getAge) {
 			findAge.push(people[x]);
 		}
@@ -254,8 +251,7 @@ function searchByHeight(person, findAge) {
 		return findHeight;
 	}
 	
-	getHeight = parseInt(getHeight);
-	
+	getHeight = parseInt(getHeight);	
 	if (getHeight <= 0 || getHeight >= 100) {
 		alert("Not found in the system.  Please try again.");
 		return searchByHeight(person, findAge);
