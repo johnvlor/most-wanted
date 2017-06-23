@@ -209,6 +209,12 @@ function searchByAge(person, people) {
 		return findAge;
 	}
 
+	else{
+    var now = new Date();
+    var age = now.getFullYear() - date.getFullYear();
+    return age;}
+};
+
 }
 
 function searchByHeight(person, findAge) {
