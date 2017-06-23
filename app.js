@@ -226,16 +226,6 @@ function chars(input){
   return true;
 }
 
-// function searchByGender(people) {
-// 	var gender = promptFor("What is the person's gender?",chars);
-// 	var person;
-// 	var newArray = people.filter(function(person) {
-// 		return (person.gender === gender);});
-// 	console.log(newArray);
-// 	alert("Gender: "+gender+("\n")+newArray.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
-
-// 	return newArray;
-// }
 
 function searchByDob(people) {
 	var dob = prompt("What is the person's date of birth?\n\nThe date format should be : mm/dd/yyyy");
