@@ -9,13 +9,13 @@ function app(people){
   switch(searchType){
     case 'yes':
 		var person = searchByName(people);
-		console.log(person);
+//		console.log(person);
 		mainMenu(person, people);
     break;
     case 'no':
     // TODO: search by traits
-		var person = [];
-		person = searchByTrait(person, people);
+		//var person = [];
+		var person = searchByTrait(person, people);
 		mainMenu(person, people);
     break;
     default:
@@ -66,11 +66,11 @@ function mainMenu(person, people){
 function searchByName(people){
   var firstName = promptFor("What is the person's first name?", chars);
   var lastName = promptFor("What is the person's last name?", chars);
- 	if(/[0-9]/.test(firstName)){
-     	alert("The first name must be alphanumerical");
-}	else if(/[0-9]/.test(lastName)){
-    	alert("The last name must be alphanumerical");
-}
+ 	// if(/[0-9]/.test(firstName)){
+     	// alert("The first name must be alphanumerical");
+// }	else if(/[0-9]/.test(lastName)){
+    	// alert("The last name must be alphanumerical");
+// }
 	var person = [];
 	for (var x = 0; x < people.length; x++) {
 		person = people[x];
@@ -115,22 +115,19 @@ function findFamily(people, person){
 
 }
 
-
 function findSpouse(people, person){
 	var spouse = people.filter(function (el){
 		return (el.currentSpouse === person.id);
 	});
-return (spouse);
+	return (spouse);
 }
-
 
 function findChildren(people, person){
 	var children = people.filter(function (el){
 		return (el.parents.includes (person.id));
 	});
-return (children);
+	return (children);
 }
-
 
 function findSiblings(people, person){
 	var siblings = people.filter(function (el){
@@ -139,17 +136,15 @@ function findSiblings(people, person){
 			// if (people === person.id)
 		return (el.parents.includes (person.parents[0]));
 	});
-return (siblings);
+	return (siblings);
 }
-
-
 
 function findParents(people, person){
 	var parents = people.filter(function (el)
 	{
 		 return (el.id === (person.parents[0]))+(el.id === (person.parents[1]));
 	});
-return (parents);
+	return (parents);
 }
 
 
@@ -185,51 +180,88 @@ function chars(input){
 function searchByTrait (person, people) {
 	alert("Let's start to search by the below options.");
 
-	var findAge	= searchByAge(person, people);
+	var findAge	= searchByAge(people);
 	var findHeight = searchByHeight(person, findAge);
 	var findWeight = searchByWeight(person, findHeight);
 	var findOccupation = searchByOccupation(person, findWeight);
 	var findEyeColor = searchByEyeColor(person, findOccupation);
-
-	console.log(findEyeColor.length);
-	console.log(findEyeColor);
 	
-	// if (findEyeColor.length === 0) {
-		// return findEyeColor[0];
-	// }
-	// else if (findEyeColor > 0) {
-		// var result = prompt("Here's a list of possible names.\n"+findEyeColor.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
-	// }
-	return findEyeColor[0];
+	if (findEyeColor.length > 1) {
+		alert("Here's a list of possible names.  Please try to search again.\n\n"+findEyeColor.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
+		return app(people);
+	}
+	else {
+		return findEyeColor[0];
+	}
+	
+	return findEyeColor;
 }
 
-function searchByAge(person, people) {
+
+function searchByAge(people) {
 	var findAge = [];
-	var getAge = promptFor("What is the person's age?  If you do not know it, please type 'skip' to proceed.", chars);
+	var getAge = promptFor("What is the person's age?\n\nIf you do not know it, please type 'skip' to proceed.", chars);
 	
 	if (getAge === 'skip') {
 		findAge = people;
 		return findAge;
 	}
+	
+	getAge = parseInt(getAge);
+	
+	if (getAge <= 0 || getAge >= 200) {
+		alert("Not found in the system.  Please try again.");
+		return searchByAge(people);
+	}
+	else if (isNaN(getAge)) {
+		alert("Not found in the system.  Please try again.");
+		return searchByAge(people);
+	}
 	else {
+		findAge = calculateAge(people, getAge);
+	}
+	return findAge;
+}
+
+function calculateAge(people, getAge) {
+	var findAge = [];
+	
+	for (var x = 0; x < people.length; x++) {
+		var person = people[x];
+		
 		var todayDate = new Date();
 		var todayYear = todayDate.getFullYear();
-		var todayMonth = todayDate.getMonth()
+		var todayMonth = todayDate.getMonth()+1;
 		var todayDay = todayDate.getDate();
-		console.log(todayDate,todayYear, todayMonth, todayDay);
 		
+		var dob = person.dob;
+		var dob = new Date(dob);
+		var dobYear = dob.getFullYear();
+		var dobMonth = dob.getMonth()+1;
+		var dobDay = dob.getDate();			
+		var age = todayYear - dobYear;
+		
+		if (todayMonth <= dobMonth) {
+			age = age -1;
+		}
+		else if (todayMonth === dobMonth) {
+			if (todayDay < dobDay) {
+				age = age -1;
+			}
+		}
 
-		
-		console.log(findAge);
-	return findAge;
+		if (age === getAge) {
+			findAge.push(people[x]);
+		}
 	}
+	alert("Age: "+getAge+("\n")+findAge.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
 
+	return findAge;
 }
 
 function searchByHeight(person, findAge) {
 	var findHeight = [];
 	var getHeight = promptFor("What is the person's height?  Please enter in inches.\n\nIf you do not know it, please type 'skip' to proceed.", chars);
-		console.log("height ",getHeight);
 	
 	if (getHeight === 'skip') {
 		findHeight = findAge;
@@ -240,11 +272,11 @@ function searchByHeight(person, findAge) {
 	
 	if (getHeight <= 0 || getHeight >= 100) {
 		alert("Not found in the system.  Please try again.");
-		return searchByHeight();
+		return searchByHeight(person, findAge);
 	}
 	else if (isNaN(getHeight)) {
 		alert("Not found in the system.  Please try again.");
-		return searchByHeight();
+		return searchByHeight(person, findAge);
 	}
 	else if (getHeight > 0 && getHeight < 100 ) {
 		findHeight = findAge.filter(function(person) {
@@ -267,16 +299,16 @@ function searchByWeight(person, findHeight) {
 	getWeight = parseInt(getWeight);
 	if (getWeight <= 0 || getWeight >= 1000) {
 		alert("Not found in the system.  Please try again.");
-		return searchByWeight();
+		return searchByWeight(person, findHeight);
 	}
 	else if (isNaN(getWeight)) {
 		alert("Not found in the system.  Please try again.");
-		return searchByWeight();
+		return searchByWeight(person, findHeight);
 	}
 	else {
 		findWeight = findHeight.filter(function(person) {
 			return (person.weight === getWeight);});
-		console.log(findWeight);
+
 		alert("Weight: "+getWeight+("\n")+findWeight.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
 
 		return findWeight;
@@ -294,7 +326,7 @@ function searchByOccupation(person, findWeight) {
 	else {
 		findOccupation = findWeight.filter(function(person) {
 			return (person.occupation === getOccupation);});
-		console.log(findOccupation);
+
 		alert("Occupation: "+getOccupation+("\n")+findOccupation.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
 
 	return findOccupation;
@@ -312,7 +344,7 @@ function searchByEyeColor(person, findOccupation) {
 	else {
 		findEyeColor = findOccupation.filter(function(person) {
 			return (person.eyeColor === getEyeColor);});
-		console.log(findEyeColor);
+
 		alert("Eye Color: "+getEyeColor+("\n")+findEyeColor.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
 
 	return findEyeColor;
@@ -331,7 +363,6 @@ function findDescendants(person, people, descendants, x=0) {
 				
 				if (newPerson.parents[i] == person.id) {
 					descendants.push(newPerson.firstName+" "+newPerson.lastName);
-					console.log("descendants = ",descendants);
 
 					for (var y = 0; y < descendants.length; y++) {
 						
@@ -349,8 +380,6 @@ function findDescendants(person, people, descendants, x=0) {
 		}
 		return findDescendants(person, people, descendants, x+1);
 	}
-	else {
-		console.log("descendants = ",descendants);
-	}
+
 	return descendants;
 }
