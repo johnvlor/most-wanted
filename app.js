@@ -1,9 +1,5 @@
 "use strict";
-/*
-Build all of your functions for displaying and gathering information below (GUI).
-*/
 
-// app is the function called to start the entire application
 function app(people){
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
@@ -13,53 +9,48 @@ function app(people){
 		mainMenu(person, people);
     break;
     case 'no':
-    // TODO: search by traits
 		var person = [];
 		person = searchByTrait(person, people);
 		mainMenu(person, people);
     break;
     default:
-    app(people); // restart app
+    app(people); 
     break;
   }
 }
 
-// Menu function to call once you find who you are looking for
 function mainMenu(person, people){
-
-  /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
 
   if(!person){
     alert("Could not find that individual.");
-    return app(people); // restart
+    return app(people); 
   }
 
   var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
 
   switch(displayOption){
     case "info":
-    // TODO: get person's info
-		displayPerson(person,people);
     break;
     
     case "family":
     	var familyInfo = findFamily(people,person);
     	displayFamily(person,familyInfo);
-
-    // TODO: get person's family
-    break;
+	break;
+    
     case "descendants":
 		var descendants = [];
 		var descendantInfo = findDescendants(person,people,descendants);
 		displayDescendants(person,descendantInfo);
     break;
+    
     case "restart":
-    app(people); // restart
+    app(people); 
     break;
+    
     case "quit":
-    return; // stop execution
+    return; 
     default:
-    return mainMenu(person, people); // ask again
+    return mainMenu(person, people);
   }
 }
 
@@ -68,20 +59,20 @@ function searchByName(people){
   var lastName = promptFor("What is the person's last name?", chars);
  	if(/[0-9]/.test(firstName)){
      	alert("The first name must be alphanumerical");
-}	else if(/[0-9]/.test(lastName)){
+	}	else if(/[0-9]/.test(lastName)){
     	alert("The last name must be alphanumerical");
-}
-	var person = [];
-	for (var x = 0; x < people.length; x++) {
-		person = people[x];
-			if ((person.firstName.toLowerCase() === firstName.toLowerCase()) && (person.lastName.toLowerCase() === lastName.toLowerCase())) {
-            return person;
+	}
+		var person = [];
+		for (var x = 0; x < people.length; x++) {
+			person = people[x];
+				if ((person.firstName.toLowerCase() === firstName.toLowerCase()) && (person.lastName.toLowerCase() === lastName.toLowerCase())) {
+            	
+            	return person;
         }
     }
   return;
 }
 
-// alerts a list of people
 function displayPeople(people){
   alert(people.map(function(person){
     return person.firstName + " " + person.lastName;
@@ -101,16 +92,12 @@ function displayPerson(person){
 }
 
 function findFamily(people, person){
-		var wholeFamily = [];
 		var spouse = findSpouse(people, person);
 		var children = findChildren(people, person);
 		var siblings = findSiblings(people, person);
 		var parents = findParents(people,person);
-		var newArray = spouse.concat(children);
-		var newArray1 = siblings.concat(parents);
-		var entireFamily = newArray.concat(newArray1);
-////fix .concat to one concat function and fix names/////
-		console.log(entireFamily);
+		var entireFamily = spouse.concat(children,siblings,parents);
+	
 	return entireFamily;
 
 }
@@ -134,13 +121,18 @@ return (children);
 
 function findSiblings(people, person){
 	var siblings = people.filter(function (el){
-		// for(i=0; i < people.length; i++)
-			// fix original person.id coming back with siblings
-			// if (people === person.id)
 		return (el.parents.includes (person.parents[0]));
 	});
+	var siblings = siblings.filter(function (el){
+		return (el.id !== person.id);
+	});
+
 return (siblings);
+	
+
+
 }
+
 
 
 
@@ -183,7 +175,7 @@ function chars(input){
 
 
 function searchByTrait (person, people) {
-	alert("Let's start to search by the below options.");
+	alert("Let's search with the following options.");
 
 	var findAge	= searchByAge(person, people);
 	var findHeight = searchByHeight(person, findAge);
@@ -194,14 +186,16 @@ function searchByTrait (person, people) {
 	console.log(findEyeColor.length);
 	console.log(findEyeColor);
 	
-	// if (findEyeColor.length === 0) {
-		// return findEyeColor[0];
-	// }
-	// else if (findEyeColor > 0) {
-		// var result = prompt("Here's a list of possible names.\n"+findEyeColor.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
-	// }
-	return findEyeColor[0];
+	if (findEyeColor.length === 0) {
+		return findEyeColor[0];
+	}
+	else if (findEyeColor > 0) {
+		var result = prompt("Here's a list of possible names.\n"+findEyeColor.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
+	}
+	return findEyeColor;
 }
+
+
 
 function searchByAge(person, people) {
 	var findAge = [];
@@ -209,6 +203,7 @@ function searchByAge(person, people) {
 	
 	if (getAge === 'skip') {
 		findAge = people;
+		
 		return findAge;
 	}
 	else {
@@ -216,21 +211,13 @@ function searchByAge(person, people) {
 		var todayYear = todayDate.getFullYear();
 		var todayMonth = todayDate.getMonth()
 		var todayDay = todayDate.getDate();
-		console.log(todayDate,todayYear, todayMonth, todayDay);
-		
 
-		
-		console.log(findAge);
 	return findAge;
 	}
 
-	else{
-    var now = new Date();
-    var age = now.getFullYear() - date.getFullYear();
-    return age;}
 };
 
-}
+
 
 function searchByHeight(person, findAge) {
 	var findHeight = [];
@@ -297,7 +284,7 @@ function searchByOccupation(person, findWeight) {
 		findOccupation = findWeight;
 		return findOccupation;
 	}
-	else {
+			else {
 		findOccupation = findWeight.filter(function(person) {
 			return (person.occupation === getOccupation);});
 		console.log(findOccupation);
@@ -317,11 +304,14 @@ function searchByEyeColor(person, findOccupation) {
 	}
 	else {
 		findEyeColor = findOccupation.filter(function(person) {
+			
 			return (person.eyeColor === getEyeColor);});
-		console.log(findEyeColor);
+		
 		alert("Eye Color: "+getEyeColor+("\n")+findEyeColor.map(function(person) {return person.firstName + " " + person.lastName}).join("\n"));
-
+		 app(findOccupation); 
 	return findEyeColor;
+
+	
 	}
 }
 
