@@ -181,6 +181,7 @@ function chars(input){
   return true;
 }
 
+
 function searchByTrait (person, people) {
 	alert("Let's start to search by the below options.");
 
@@ -189,6 +190,7 @@ function searchByTrait (person, people) {
 	var findWeight = searchByWeight(person, findHeight);
 	var findOccupation = searchByOccupation(person, findWeight);
 	var findEyeColor = searchByEyeColor(person, findOccupation);
+
 	console.log(findEyeColor.length);
 	console.log(findEyeColor);
 	
