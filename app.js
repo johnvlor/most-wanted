@@ -28,6 +28,7 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
+    	displayPerson(person);
     break;
     
     case "family":
